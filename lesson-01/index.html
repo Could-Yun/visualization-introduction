@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="第一章：通过数字博物馆特展案例学习 Web 页面布局、Grid、Flexbox 与响应式设计。" />
+    <meta name="theme-color" content="#111a2e" />
+    <title>第一章 · Web 页面布局｜可视化导论</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111a2e'/%3E%3Cpath d='M15 16h34v8H15zm0 13h15v19H15zm20 0h14v8H35zm0 11h14v8H35z' fill='%23f2eee5'/%3E%3Ccircle cx='45' cy='20' r='4' fill='%23e04d35'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="../styles.css?v=6" />
+    <link rel="stylesheet" href="./styles.css?v=4" />
+    <script type="module" src="./lesson.js?v=4"></script>
+  </head>
+  <body class="lesson-page">
+    <a class="skip-link" href="#lesson-content">跳到课程内容</a>
+    <header class="site-header lesson-topbar">
+      <a class="wordmark" href="../" aria-label="返回可视化导论首页">
+        <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="wordmark-copy"><b>可视化导论</b><small>VISUALIZATION INTRODUCTION</small></span>
+      </a>
+      <div class="chapter-label"><span>CHAPTER 01</span><b>Web 页面布局</b></div>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换明暗主题"><span aria-hidden="true">◐</span></button>
+    </header>
+
+    <section class="lesson-intro" aria-labelledby="lesson-title">
+      <div>
+        <p class="eyebrow">CHAPTER 01 · WEB PAGE LAYOUT</p>
+        <h1 id="lesson-title">如何布局制作<br /><em>一个 Web 网页</em></h1>
+      </div>
+      <div class="intro-note">
+        <p>你的任务：把一份展览内容清单做成可在电脑和手机阅读的专题页。每节先探索案例，再独立修改代码，通过结果检查与理解题后记录进度。</p>
+        <div class="progress-meta"><span>学习进度</span><strong data-progress-text>0 / 6</strong></div>
+        <div class="progress-track" role="progressbar" aria-label="第一章学习进度" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" data-progress-track><i></i></div>
+      </div>
+    </section>
+
+    <nav class="workflow-wrap" aria-label="第一章学习流程">
+      <ol class="workflow" data-workflow>
+        <li><a href="#planning" data-step-link="planning"><span>01</span><b>内容规划</b><i aria-hidden="true"></i></a></li>
+        <li><a href="#structure" data-step-link="structure"><span>02</span><b>页面骨架</b><i aria-hidden="true"></i></a></li>
+        <li><a href="#grid" data-step-link="grid"><span>03</span><b>容器与网格</b><i aria-hidden="true"></i></a></li>
+        <li><a href="#modules" data-step-link="modules"><span>04</span><b>模块布局</b><i aria-hidden="true"></i></a></li>
+        <li><a href="#responsive" data-step-link="responsive"><span>05</span><b>响应式</b><i aria-hidden="true"></i></a></li>
+        <li><a href="#review" data-step-link="review"><span>06</span><b>细节验收</b><i aria-hidden="true"></i></a></li>
+      </ol>
+    </nav>
+
+    <main id="lesson-content" class="lesson-main">
+      <header class="step-heading">
+        <div><p data-step-kicker>STEP 01 · CONTENT FIRST</p><h2 data-step-title>先决定说什么，再决定怎么排</h2></div>
+        <p data-step-lead>布局不是把盒子摆整齐，而是让读者在正确的时刻看到正确的信息。</p>
+      </header>
+
+      <aside class="lesson-mission"><div><span class="section-label">这节要解决的具体问题</span><p data-mission></p></div><a href="#practice">去完成代码练习 ↓</a></aside>
+
+      <div class="learning-grid">
+        <aside class="theory-column">
+          <section class="theory-block" aria-labelledby="principle-title">
+            <span class="section-label">设计原理</span>
+            <h3 id="principle-title" data-theory-title>用层级建立阅读顺序</h3>
+            <p data-theory-copy>先明确页面的主要任务，再用位置、大小和留白表达内容主次。重要内容不等于所有内容都要变大。</p>
+            <ul class="principle-list" data-principles></ul>
+          </section>
+          <section class="control-block" aria-labelledby="controls-title">
+            <div class="block-heading"><span class="section-label">动手调整</span><button type="button" class="reset-button" data-reset>恢复默认</button></div>
+            <h3 id="controls-title">改变设计决策</h3>
+            <div class="controls" data-controls></div>
+          </section>
+          <div class="insight" aria-live="polite"><span>为什么</span><p data-insight></p></div>
+        </aside>
+
+        <section class="studio-column" aria-label="案例实时工作台">
+          <div class="preview-card">
+            <div class="panel-toolbar">
+              <div><span class="section-label">① 探索案例 · 改参数看变化</span><strong data-preview-status>桌面预览 · 1024px</strong></div>
+              <div class="viewport-buttons" aria-label="预览宽度">
+                <button type="button" data-viewport="desktop" aria-pressed="true" title="桌面预览">▰</button>
+                <button type="button" data-viewport="tablet" aria-pressed="false" title="平板预览">▣</button>
+                <button type="button" data-viewport="mobile" aria-pressed="false" title="手机预览">▯</button>
+              </div>
+            </div>
+            <div class="preview-viewport" data-preview-viewport>
+              <article class="museum-preview" data-museum-preview aria-label="形藏数字博物馆案例预览">
+                <div class="guide-grid" data-grid-overlay aria-hidden="true"></div>
+                <header class="museum-nav" data-region="header"><a href="#" tabindex="-1">形藏 XINGCANG</a><nav><span>特展</span><span>典藏</span><span>参观</span></nav></header>
+                <section class="museum-hero" data-region="hero">
+                  <div class="museum-hero-copy">
+                    <small>年度特展 · 2026</small>
+                    <h3>器物有声</h3>
+                    <p>从泥土、火焰与时间中，听见东方器物的日常回响。</p>
+                    <button type="button" tabindex="-1">开始观展 →</button>
+                  </div>
+                  <img src="../assets/museum-hero.png" alt="展厅中的青瓷花瓶" width="1536" height="1024" />
+                </section>
+                <dl class="museum-facts" data-region="facts">
+                  <div><dt>48</dt><dd>精选器物</dd></div><div><dt>06</dt><dd>历史时期</dd></div><div><dt>1200</dt><dd>年工艺流变</dd></div>
+                </dl>
+                <section class="museum-feature" data-region="feature">
+                  <div><small>CURATOR'S NOTE</small><h4>一只器物，如何保存生活的温度？</h4></div>
+                  <p>观察比例、釉色和使用痕迹，器物便不再只是玻璃柜中的年代标签。</p>
+                </section>
+                <section class="museum-gallery" data-region="gallery">
+                  <article><span>01</span><h4>青瓷：雨过天青</h4><p>以留白突出材质与轮廓。</p></article>
+                  <article><span>02</span><h4>陶器：火的尺度</h4><p>从实用器到精神容器。</p></article>
+                  <article><span>03</span><h4>金工：光的秩序</h4><p>细部纹样构成观看路径。</p></article>
+                </section>
+                <footer class="museum-footer" data-region="footer"><strong>形藏</strong><span>示例内容仅用于页面布局教学</span></footer>
+              </article>
+            </div>
+          </div>
+
+          <div class="code-card">
+            <div class="code-toolbar">
+              <div class="code-tabs" role="tablist" aria-label="代码语言">
+                <button type="button" role="tab" data-code-tab="html" aria-selected="true">HTML</button>
+                <button type="button" role="tab" data-code-tab="css" aria-selected="false">CSS</button>
+              </div>
+              <div><span data-code-note>当前结构</span><button type="button" class="copy-button" data-copy-code>复制代码</button></div>
+            </div>
+            <pre class="code-view" aria-label="与预览同步的关键代码"><code data-code></code></pre>
+          </div>
+        </section>
+      </div>
+
+      <section class="practice-lab" id="practice" aria-labelledby="practice-title">
+        <header class="practice-heading"><div><span class="section-label">独立练习 · 把观察变成能力</span><h2 id="practice-title" data-practice-title></h2></div><span data-practice-language></span></header>
+        <p data-practice-goal></p>
+        <ol class="practice-instructions" data-practice-instructions></ol>
+        <div class="practice-grid">
+          <div><label class="editor-label" for="practice-editor">修改下面的代码（输入后自动更新练习预览）</label><textarea id="practice-editor" spellcheck="false" autocapitalize="off" autocomplete="off" data-practice-editor></textarea><div class="practice-actions"><button type="button" data-practice-reset>重置练习</button><button type="button" data-practice-hint>提示</button><button type="button" data-practice-answer>查看参考解法</button></div><p class="practice-hint" data-practice-hint-text hidden></p></div>
+          <div><div class="exercise-preview-bar"><strong>你的练习结果</strong><div><button type="button" data-practice-width="720" aria-pressed="true">720px</button><button type="button" data-practice-width="390" aria-pressed="false">390px</button></div></div><div class="exercise-frame-scroll"><iframe title="独立练习实时预览" sandbox="allow-same-origin" data-practice-frame></iframe></div></div>
+        </div>
+        <div class="practice-assessment"><button type="button" class="check-practice" data-practice-check>检查我的实现</button> <button type="button" data-practice-download>下载当前练习 HTML</button><ul data-practice-results aria-live="polite"></ul></div>
+        <fieldset class="understanding-question"><legend data-practice-question></legend><div data-practice-options></div><p data-practice-quiz-feedback aria-live="polite"></p></fieldset>
+        <p class="practice-transfer" data-practice-transfer></p>
+      </section>
+
+      <section class="checkpoint" aria-labelledby="checkpoint-title">
+        <div><span class="section-label">本步检查点</span><h3 id="checkpoint-title" data-checkpoint-title>读者能否在 5 秒内说出页面主题？</h3></div>
+        <p data-checkpoint-copy>先检查信息顺序，再讨论颜色和装饰。一个清楚的灰度线框图，通常比一个混乱的精美页面更接近正确答案。</p>
+        <button class="complete-step" type="button" data-complete-step><span data-complete-label>完成本步并继续</span><b aria-hidden="true">→</b></button>
+      </section>
+
+      <nav class="step-pagination" aria-label="步骤导航">
+        <button type="button" data-prev-step>← 上一步</button>
+        <a href="../">返回课程首页</a>
+        <button type="button" data-next-step>下一步 →</button>
+      </nav>
+    </main>
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+  </body>
+</html>
