@@ -1,4 +1,6 @@
-import { bindPractice, renderPractice, checkPractice, EXERCISES } from './practice.js';
+import { bindPractice, renderPractice, checkPractice, setPracticeLanguage, exerciseFor } from './practice.js';
+import { getLanguage, setLanguage, applyStaticCopy, LESSON_COPY } from '../i18n.js';
+import { EN_STEPS, LESSON_UI } from './lesson-copy.js';
 const THEME_KEY = "layout-lab-theme";
 const PROGRESS_KEY = "layout-lab-progress-v2";
 
@@ -109,6 +111,9 @@ const defaults = {
 let state = Object.assign({}, defaults);
 let completed = readProgress();
 let toastTimer;
+let pageLanguage = getLanguage();
+const ui = (key) => LESSON_UI[pageLanguage][key];
+const currentStep = () => (pageLanguage === 'en' ? EN_STEPS : STEPS)[state.step];
 
 function readProgress() {
   try { return JSON.parse(localStorage.getItem(PROGRESS_KEY) || "[]"); }
@@ -129,7 +134,7 @@ function bindTheme() {
   const button = document.querySelector("[data-theme-toggle]");
   const refresh = () => {
     const dark = document.documentElement.dataset.theme === "dark";
-    button.setAttribute("aria-label", dark ? "切换到浅色主题" : "切换到深色主题");
+    button.setAttribute("aria-label", dark ? LESSON_COPY[pageLanguage].themeLight : LESSON_COPY[pageLanguage].themeDark);
     button.querySelector("span").textContent = dark ? "☀" : "◐";
   };
   refresh();
@@ -157,59 +162,59 @@ function renderControls() {
   const mount = document.querySelector("[data-controls]");
   if (state.step === 0) {
     mount.innerHTML = [
-      '<label class="control"><span>页面主要任务</span><select data-control="primary">',
-      '<option value="exhibit">进入特展</option><option value="facts">查看馆藏概况</option></select></label>',
-      '<div class="control"><span>内容叙事顺序</span><div class="choice-group">',
-      choiceButton("order", "story", "故事优先", state.order),
-      choiceButton("order", "facts", "指标优先", state.order),
+      '<label class="control"><span>' + ui('primaryTask') + '</span><select data-control="primary">',
+      '<option value="exhibit">' + ui('enterExhibit') + '</option><option value="facts">' + ui('viewFacts') + '</option></select></label>',
+      '<div class="control"><span>' + ui('contentOrder') + '</span><div class="choice-group">',
+      choiceButton("order", "story", ui('storyFirst'), state.order),
+      choiceButton("order", "facts", ui('factsFirst'), state.order),
       "</div></div>"
     ].join("");
     mount.querySelector('[data-control="primary"]').value = state.primary;
   } else if (state.step === 1) {
     mount.innerHTML = [
-      '<div class="control"><span>骨架写法</span><div class="choice-group">',
-      choiceButton("structureType", "semantic", "语义标签", state.structureType),
-      choiceButton("structureType", "generic", "全用 div", state.structureType),
+      '<div class="control"><span>' + ui('structureType') + '</span><div class="choice-group">',
+      choiceButton("structureType", "semantic", ui('semanticTags'), state.structureType),
+      choiceButton("structureType", "generic", ui('divOnly'), state.structureType),
       "</div></div>",
-      '<label class="toggle"><span>显示语义地标</span><input type="checkbox" data-control="semantic"></label>',
-      '<label class="toggle"><span>显示盒模型占位</span><input type="checkbox" data-control="boxes"></label>'
+      '<label class="toggle"><span>' + ui('landmarks') + '</span><input type="checkbox" data-control="semantic"></label>',
+      '<label class="toggle"><span>' + ui('showBoxes') + '</span><input type="checkbox" data-control="boxes"></label>'
     ].join("");
     mount.querySelector('[data-control="semantic"]').checked = state.semantic;
     mount.querySelector('[data-control="boxes"]').checked = state.boxes;
   } else if (state.step === 2) {
     mount.innerHTML = [
-      '<label class="control"><span>最大容器宽度 <output>' + state.containerWidth + 'px</output></span><input type="range" min="760" max="1180" step="20" value="' + state.containerWidth + '" data-control="containerWidth"></label>',
-      '<label class="control"><span>参考列数 <output>' + state.columns + ' 列</output></span><input type="range" min="4" max="12" step="2" value="' + state.columns + '" data-control="columns"></label>',
-      '<label class="control"><span>列间距 <output>' + state.gap + 'px</output></span><input type="range" min="8" max="40" step="2" value="' + state.gap + '" data-control="gap"></label>',
-      '<label class="toggle"><span>显示网格辅助线</span><input type="checkbox" data-control="showGrid"></label>'
+      '<label class="control"><span>' + ui('containerWidth') + ' <output>' + state.containerWidth + 'px</output></span><input type="range" min="760" max="1180" step="20" value="' + state.containerWidth + '" data-control="containerWidth"></label>',
+      '<label class="control"><span>' + ui('referenceColumns') + ' <output>' + state.columns + ' ' + (pageLanguage === 'en' ? 'columns' : '列') + '</output></span><input type="range" min="4" max="12" step="2" value="' + state.columns + '" data-control="columns"></label>',
+      '<label class="control"><span>' + ui('columnGap') + ' <output>' + state.gap + 'px</output></span><input type="range" min="8" max="40" step="2" value="' + state.gap + '" data-control="gap"></label>',
+      '<label class="toggle"><span>' + ui('gridGuides') + '</span><input type="checkbox" data-control="showGrid"></label>'
     ].join("");
     mount.querySelector('[data-control="showGrid"]').checked = state.showGrid;
   } else if (state.step === 3) {
     mount.innerHTML = [
-      '<label class="control"><span>首屏图文比例</span><select data-control="heroRatio"><option value="5-7">5 : 7</option><option value="1-1">1 : 1</option><option value="7-5">7 : 5</option></select></label>',
-      '<div class="control"><span>展品卡片列数</span><div class="choice-group">',
-      choiceButton("cardColumns", "2", "两列", String(state.cardColumns)),
-      choiceButton("cardColumns", "3", "三列", String(state.cardColumns)),
+      '<label class="control"><span>' + ui('heroRatio') + '</span><select data-control="heroRatio"><option value="5-7">5 : 7</option><option value="1-1">1 : 1</option><option value="7-5">7 : 5</option></select></label>',
+      '<div class="control"><span>' + ui('cardColumns') + '</span><div class="choice-group">',
+      choiceButton("cardColumns", "2", ui('twoColumns'), String(state.cardColumns)),
+      choiceButton("cardColumns", "3", ui('threeColumns'), String(state.cardColumns)),
       "</div></div>",
-      '<label class="control"><span>标题尺度 <output>' + state.titleScale + '%</output></span><input type="range" min="80" max="125" step="5" value="' + state.titleScale + '" data-control="titleScale"></label>'
+      '<label class="control"><span>' + ui('titleScale') + ' <output>' + state.titleScale + '%</output></span><input type="range" min="80" max="125" step="5" value="' + state.titleScale + '" data-control="titleScale"></label>'
     ].join("");
     mount.querySelector('[data-control="heroRatio"]').value = state.heroRatio;
   } else if (state.step === 4) {
     mount.innerHTML = [
-      '<div class="control"><span>测试视口</span><div class="choice-group three">',
-      choiceButton("viewport", "desktop", "桌面", state.viewport),
-      choiceButton("viewport", "tablet", "平板", state.viewport),
-      choiceButton("viewport", "mobile", "手机", state.viewport),
+      '<div class="control"><span>' + ui('testViewport') + '</span><div class="choice-group three">',
+      choiceButton("viewport", "desktop", ui('desktop'), state.viewport),
+      choiceButton("viewport", "tablet", ui('tablet'), state.viewport),
+      choiceButton("viewport", "mobile", ui('mobile'), state.viewport),
       "</div></div>",
-      '<label class="control"><span>窄屏重排方式</span><select data-control="mobileBehavior"><option value="stack">图文自然堆叠</option><option value="compact">压缩内容间距</option></select></label>'
+      '<label class="control"><span>' + ui('narrowReflow') + '</span><select data-control="mobileBehavior"><option value="stack">' + ui('stack') + '</option><option value="compact">' + ui('compact') + '</option></select></label>'
     ].join("");
     mount.querySelector('[data-control="mobileBehavior"]').value = state.mobileBehavior;
   } else {
     mount.innerHTML = [
-      '<label class="toggle"><span>高对比检查</span><input type="checkbox" data-control="contrast"></label>',
-      '<label class="toggle"><span>显示键盘焦点</span><input type="checkbox" data-control="focusDemo"></label>',
-      '<label class="toggle"><span>减少动态效果</span><input type="checkbox" data-control="reducedMotion"></label>',
-      '<label class="control"><span>正文每行长度 <output>' + state.lineLength + ' 字</output></span><input type="range" min="22" max="48" step="2" value="' + state.lineLength + '" data-control="lineLength"></label>'
+      '<label class="toggle"><span>' + ui('contrast') + '</span><input type="checkbox" data-control="contrast"></label>',
+      '<label class="toggle"><span>' + ui('keyboardFocus') + '</span><input type="checkbox" data-control="focusDemo"></label>',
+      '<label class="toggle"><span>' + ui('reducedMotion') + '</span><input type="checkbox" data-control="reducedMotion"></label>',
+      '<label class="control"><span>' + ui('lineLength') + ' <output>' + state.lineLength + ' ' + ui('chars') + '</output></span><input type="range" min="22" max="48" step="2" value="' + state.lineLength + '" data-control="lineLength"></label>'
     ].join("");
     ["contrast", "focusDemo", "reducedMotion"].forEach((key) => {
       mount.querySelector('[data-control="' + key + '"]').checked = state[key];
@@ -227,7 +232,7 @@ function renderGridOverlay() {
 function renderPreview() {
   const preview = document.querySelector("[data-museum-preview]");
   const viewport = document.querySelector("[data-preview-viewport]");
-  preview.querySelector(".museum-hero button").textContent = state.primary === "facts" ? "查看馆藏概况 →" : "开始观展 →";
+  preview.querySelector(".museum-hero button").textContent = state.primary === "facts" ? ui('factsAction') : ui('exhibitAction');
   preview.style.setProperty("--case-max", state.containerWidth + "px");
   preview.style.setProperty("--case-cols", String(state.columns));
   preview.style.setProperty("--case-gap", state.gap + "px");
@@ -251,7 +256,7 @@ function renderPreview() {
   preview.classList.toggle("reduced-demo", state.step === 5 && state.reducedMotion);
 
   viewport.className = "preview-viewport mode-" + state.viewport;
-  const viewportLabels = { desktop: "桌面预览 · 1024px", tablet: "平板预览 · 720px", mobile: "手机预览 · 390px" };
+  const viewportLabels = { desktop: ui('desktopStatus'), tablet: ui('tabletStatus'), mobile: ui('mobileStatus') };
   document.querySelector("[data-preview-status]").textContent = viewportLabels[state.viewport];
   document.querySelectorAll("[data-viewport]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.viewport === state.viewport)));
   renderGridOverlay();
@@ -264,7 +269,7 @@ function htmlSkeleton() {
     : { header: "div", main: "div", section: "div", article: "div", footer: "div", nav: "div" };
   const heroSection = [
     "  <" + tags.section + ' class="exhibition-hero">',
-    '    <button class="primary-action">' + (state.primary === "facts" ? "查看馆藏概况" : "开始观展") + "</button>",
+    '    <button class="primary-action">' + (state.primary === "facts" ? ui('viewFacts') : ui('enterExhibit')) + "</button>",
     "  </" + tags.section + ">"
   ].join("\n");
   let sections = [
@@ -276,7 +281,7 @@ function htmlSkeleton() {
   if (state.order === "facts") sections = [sections[1], sections[0], sections[2], sections[3]];
   return [
     "<" + tags.header + ' class="site-header">',
-    "  <" + tags.nav + ' aria-label="主导航">…</' + tags.nav + ">",
+    "  <" + tags.nav + ' aria-label="' + (pageLanguage === 'en' ? 'Main navigation' : '主导航') + '">…</' + tags.nav + ">",
     "</" + tags.header + ">",
     "<" + tags.main + ">",
     sections.join("\n"),
@@ -313,11 +318,18 @@ function cssForStep() {
       "  margin-inline: auto;",
       "}",
       "",
-      "/* 参考网格用于对齐；不等于卡片列数 */",
+      "/* " + ui('gridComment') + " */",
       ".reference-grid {",
       "  display: grid;",
       "  grid-template-columns: repeat(" + state.columns + ", minmax(0, 1fr));",
       "  gap: " + state.gap + "px;",
+      "}",
+      "",
+      "/* " + ui('flexComment') + " */",
+      ".museum-nav {",
+      "  display: flex;",
+      "  align-items: center;",
+      "  justify-content: space-between;",
       "}"
     ].join("\n");
   }
@@ -341,9 +353,9 @@ function cssForStep() {
     ].join("\n");
   }
   if (state.step === 4) {
-    const viewportText = state.viewport === "mobile" ? "手机 390px，媒体查询已生效" : state.viewport === "tablet" ? "平板 720px，检查中间状态" : "桌面 1024px，使用基础规则";
+    const viewportText = state.viewport === "mobile" ? ui('previewMobileComment') : state.viewport === "tablet" ? ui('previewTabletComment') : ui('previewDesktopComment');
     return [
-      "/* 当前预览：" + viewportText + " */",
+      "/* " + viewportText + " */",
       ".exhibition-hero {",
       "  display: grid;",
       "  grid-template-columns: 5fr 7fr;",
@@ -385,7 +397,7 @@ function activeLinesFor(code, language) {
   } else if (state.step === 2) needles.push(String(state.containerWidth), "repeat(" + state.columns, state.gap + "px");
   else if (state.step === 3) needles.push("grid-template-columns", (2.8 * state.titleScale / 100).toFixed(2), "repeat(" + state.cardColumns);
   else if (state.step === 4) {
-    needles.push("当前预览");
+    needles.push("/*");
     needles.push(state.viewport === "mobile" ? "@media" : "5fr 7fr");
     if (state.viewport === "mobile") needles.push(state.mobileBehavior === "compact" ? "1.5rem" : "2.5rem");
   }
@@ -448,18 +460,18 @@ function renderCode() {
     return '<span class="code-line' + (active.has(index) ? " is-active" : "") + '"><span class="line-no">' + (index + 1) + '</span><span>' + (highlighted || " ") + "</span></span>";
   }).join("");
   document.querySelectorAll("[data-code-tab]").forEach((button) => button.setAttribute("aria-selected", String(button.dataset.codeTab === state.language)));
-  document.querySelector("[data-code-note]").textContent = state.language === "html" ? "当前语义骨架" : "当前生效规则";
+  document.querySelector("[data-code-note]").textContent = state.language === "html" ? ui('htmlNote') : ui('cssNote');
 }
 
 function updateInsight() {
-  let text = STEPS[state.step].insight;
-  if (state.step === 0 && state.order === "facts") text = "指标优先会让读者先获得规模概览，但也会削弱展览叙事。只有主要任务确实是快速查看概况时才这样安排。";
-  if (state.step === 0 && state.primary === "facts" && state.order !== "facts") text = "主要按钮已经改为“查看馆藏概况”，但指标仍在首屏之后。行动目标与内容顺序不一致，提示我们还应把指标区提前。";
-  if (state.step === 1 && state.structureType === "generic") text = "全部使用 div 后，视觉暂时不变，但结构意义消失。屏幕阅读器和搜索引擎无法轻易分辨导航、正文和页脚。";
-  if (state.step === 2) text = state.gap < 16 ? "间距过小时模块会显得拥挤，分组边界变得模糊。统一 gap 比逐项添加 margin 更容易维护。" : STEPS[state.step].insight;
-  if (state.step === 3 && state.titleScale > 115) text = "标题继续放大会挤压摘要和按钮。视觉层级需要差异，但也要保留内容完整性。";
-  if (state.step === 4 && state.viewport === "mobile") text = "手机预览中，首屏从两栏变成单列，次要导航收起，主要行动仍在标题之后立即可见。";
-  if (state.step === 5 && !state.focusDemo) text = "关闭焦点轮廓后，键盘用户无法判断当前位置。焦点样式应被设计，而不是简单移除。";
+  let text = currentStep().insight;
+  if (state.step === 0 && state.order === "facts") text = ui('factsFirstInsight');
+  if (state.step === 0 && state.primary === "facts" && state.order !== "facts") text = ui('mismatchInsight');
+  if (state.step === 1 && state.structureType === "generic") text = ui('divInsight');
+  if (state.step === 2) text = state.gap < 16 ? ui('crampedInsight') : currentStep().insight;
+  if (state.step === 3 && state.titleScale > 115) text = ui('largeTitleInsight');
+  if (state.step === 4 && state.viewport === "mobile") text = ui('mobileInsight');
+  if (state.step === 5 && !state.focusDemo) text = ui('focusInsight');
   document.querySelector("[data-insight]").textContent = text;
 }
 
@@ -478,16 +490,16 @@ function renderProgress() {
   const completeButton = document.querySelector("[data-complete-step]");
   const isDone = completed.includes(currentId);
   completeButton.classList.toggle("is-complete", isDone);
-  document.querySelector("[data-complete-label]").textContent = isDone ? "本节已通过 · 再检查并继续" : "检查练习并记录完成";
+  document.querySelector("[data-complete-label]").textContent = isDone ? ui('doneLabel') : ui('completeLabel');
 }
 
 function renderStep(scrollFlow, keepLanguage) {
-  const step = STEPS[state.step];
+  const step = currentStep();
   if (!keepLanguage) state.language = step.defaultLang;
   document.querySelector("[data-step-kicker]").textContent = step.kicker;
   document.querySelector("[data-step-title]").textContent = step.title;
   document.querySelector("[data-step-lead]").textContent = step.lead;
-  document.querySelector('[data-mission]').textContent = EXERCISES[state.step].goal;
+  document.querySelector('[data-mission]').textContent = exerciseFor(state.step, pageLanguage).goal;
   document.querySelector("[data-theory-title]").textContent = step.theoryTitle;
   document.querySelector("[data-theory-copy]").textContent = step.theoryCopy;
   document.querySelector("[data-principles]").innerHTML = step.principles.map((item) => "<li>" + item + "</li>").join("");
@@ -527,7 +539,7 @@ function resetCurrentStep() {
   };
   resetKeys[id].forEach((key) => { state[key] = defaults[key]; });
   renderStep(false, true);
-  showToast("已恢复本步默认设置");
+  showToast(ui('restored'));
 }
 
 function updateControl(target) {
@@ -538,7 +550,7 @@ function updateControl(target) {
   else state[key] = target.value;
   if (target.type === "range") {
     const output = target.closest(".control").querySelector("output");
-    const suffix = key === "columns" ? " 列" : key === "titleScale" ? "%" : key === "lineLength" ? " 字" : "px";
+    const suffix = key === "columns" ? (pageLanguage === 'en' ? ' columns' : ' 列') : key === "titleScale" ? "%" : key === "lineLength" ? ' ' + ui('chars') : "px";
     if (output) output.textContent = state[key] + suffix;
   } else {
     renderControls();
@@ -549,6 +561,15 @@ function updateControl(target) {
 }
 
 function bindInteractions() {
+  document.querySelector('[data-language-toggle]').addEventListener('click', () => {
+    pageLanguage = pageLanguage === 'zh' ? 'en' : 'zh';
+    setLanguage(pageLanguage);
+    applyStaticCopy(LESSON_COPY, pageLanguage);
+    setPracticeLanguage(pageLanguage);
+    const dark = document.documentElement.dataset.theme === 'dark';
+    document.querySelector('[data-theme-toggle]').setAttribute('aria-label', dark ? LESSON_COPY[pageLanguage].themeLight : LESSON_COPY[pageLanguage].themeDark);
+    renderStep(false, true);
+  });
   document.querySelector("[data-controls]").addEventListener("input", (event) => updateControl(event.target));
   document.querySelector("[data-controls]").addEventListener("change", (event) => updateControl(event.target));
   document.querySelector("[data-controls]").addEventListener("click", (event) => {
@@ -588,9 +609,9 @@ function bindInteractions() {
   document.querySelector("[data-copy-code]").addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(codeForLanguage(state.language));
-      showToast("当前代码已复制");
+      showToast(ui('copied'));
     } catch {
-      showToast("复制失败，请手动选择代码");
+      showToast(ui('copyFailed'));
     }
   });
   document.querySelector("[data-reset]").addEventListener("click", resetCurrentStep);
@@ -605,7 +626,7 @@ function bindInteractions() {
     try { passed = await checkPractice(); } finally { button.disabled = false; }
     if (state.step !== index) return;
     if (!passed) {
-      showToast('请先修正练习并回答理解题；检查结果已在练习区列出');
+      showToast(ui('incomplete'));
       document.querySelector('.practice-assessment').scrollIntoView({behavior:'smooth', block:'center'});
       return;
     }
@@ -614,7 +635,7 @@ function bindInteractions() {
       completed.push(id);
       saveProgress();
       renderProgress();
-      showToast(completed.length === 6 ? "六节练习均已通过，开始制作自己的课程作业页吧" : "本节练习与理解题已通过");
+      showToast(completed.length === 6 ? ui('allDone') : ui('passed'));
     }
     if (state.step < STEPS.length - 1) goToStep(state.step + 1);
   });
@@ -630,6 +651,8 @@ function selectStepFromHash() {
 }
 
 function start() {
+  applyStaticCopy(LESSON_COPY, pageLanguage);
+  setPracticeLanguage(pageLanguage);
   applyTheme();
   bindTheme();
   bindPractice();

@@ -7,55 +7,55 @@
     <meta name="theme-color" content="#06162d" />
     <title>Visualization Introduction｜可视化导论</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2306162d'/%3E%3Cpath d='M14 44V31h7v13zm14 0V18h7v26zm14 0V25h7v19z' fill='%2369dcff'/%3E%3Ccircle cx='46' cy='18' r='5' fill='%23ff806d'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="./styles.css?v=7" />
-    <script type="module" src="./app.js?v=3"></script>
+    <link rel="stylesheet" href="./styles.css?v=8" />
+    <script type="module" src="./app.js?v=4"></script>
   </head>
   <body class="home-page">
-    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <a class="skip-link" href="#main-content" data-i18n="skip">跳到主要内容</a>
     <header class="site-header">
-      <a class="wordmark" href="./" aria-label="可视化导论首页">
+      <a class="wordmark" href="./" aria-label="可视化导论首页" data-i18n-label="brandHome">
         <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="wordmark-copy"><b>可视化导论</b><small>VISUALIZATION INTRODUCTION</small></span>
+        <span class="wordmark-copy"><b data-i18n="brand">可视化导论</b><small data-i18n="brandSmall">VISUALIZATION INTRODUCTION</small></span>
       </a>
-      <button class="icon-button" type="button" data-theme-toggle aria-label="切换明暗主题"><span aria-hidden="true">◐</span></button>
+      <div class="header-actions"><button class="language-button" type="button" data-language-toggle aria-label="Switch to English">EN</button><button class="icon-button" type="button" data-theme-toggle aria-label="切换明暗主题"><span aria-hidden="true">◐</span></button></div>
     </header>
 
     <main id="main-content">
       <section class="home-hero" aria-labelledby="hero-title">
-        <img class="hero-image" src="./assets/visualization-hero.png" alt="由坐标网格、数据节点、曲线和几何形态构成的抽象可视化图景" width="1536" height="1024" />
+        <img class="hero-image" src="./assets/visualization-hero.png" alt="由坐标网格、数据节点、曲线和几何形态构成的抽象可视化图景" data-i18n-alt="heroAlt" width="1536" height="1024" />
         <div class="hero-copy">
-          <p class="eyebrow">VISUALIZATION INTRODUCTION · 交互式课程</p>
-          <h1 id="hero-title">可视化导论</h1>
-          <p>可视化将信息中的关系转化为可理解的视觉结构。本课程学习如何组织信息、选择恰当的图形表达，并通过交互帮助人们阅读、比较与探索。</p>
+          <p class="eyebrow" data-i18n="eyebrow">VISUALIZATION INTRODUCTION · 交互式课程</p>
+          <h1 id="hero-title" data-i18n="heroTitle">可视化导论</h1>
+          <p data-i18n="heroCopy">可视化将信息中的关系转化为可理解的视觉结构。本课程学习如何组织信息、选择恰当的图形表达，并通过交互帮助人们阅读、比较与探索。</p>
         </div>
       </section>
 
-      <section class="chapter-section" id="chapter" aria-label="当前开放章节">
+      <section class="chapter-section" id="chapter" aria-label="当前开放章节" data-i18n-label="chapterRegion">
         <div class="shell">
-          <div class="directory-heading"><h2>章节目录</h2></div>
-          <a class="chapter-stage" href="./lesson-01/" aria-label="进入第一章：Web 页面布局" data-continue-link>
+          <div class="directory-heading"><h2 data-i18n="directory">章节目录</h2></div>
+          <a class="chapter-stage" href="./lesson-01/" aria-label="进入第一章：Web 页面布局" data-i18n-label="chapterLink" data-continue-link>
             <div class="chapter-number" aria-hidden="true">01</div>
             <div class="chapter-summary">
-              <div class="stage-meta"><span>CHAPTER 01 · 当前开放</span></div>
-              <h2>Web 页面布局</h2>
-              <p>制作“形藏”专题页 · 6 个小节 · 每节包含代码练习与反馈</p>
+              <div class="stage-meta"><span data-i18n="chapterMeta">CHAPTER 01 · 当前开放</span></div>
+              <h2 data-i18n="chapterTitle">Web 页面布局</h2>
+              <p data-i18n="chapterCopy">制作“形藏”专题页 · 6 个小节 · 每节包含代码练习与反馈</p>
             </div>
-            <span class="stage-cta"><span data-continue-label>进入第一章</span><b aria-hidden="true">↗</b></span>
+            <span class="stage-cta"><span data-continue-label data-i18n="chapterEnter">进入第一章</span><b aria-hidden="true">↗</b></span>
           </a>
         </div>
       </section>
 
       <section class="outcomes shell" id="outcomes" aria-labelledby="outcomes-title">
-        <div class="outcomes-heading"><p class="eyebrow">LEARNING OUTCOMES</p><h2 id="outcomes-title">逐步建立<br />可视化能力</h2></div>
+        <div class="outcomes-heading"><p class="eyebrow" data-i18n="outcomesKicker">LEARNING OUTCOMES</p><h2 id="outcomes-title" data-i18n-html="outcomesTitle">逐步建立<br />可视化能力</h2></div>
         <div class="outcome-list">
-          <article><span>01</span><div><h3>组织视觉信息</h3><p>识别内容关系，用层级、分组和顺序降低理解成本。</p></div></article>
-          <article><span>02</span><div><h3>选择表达形式</h3><p>根据目的与媒介，判断什么样的视觉结构更合适。</p></div></article>
-          <article><span>03</span><div><h3>构建交互体验</h3><p>让可视化在不同屏幕与操作方式下保持清楚、稳定、可用。</p></div></article>
+          <article><span>01</span><div><h3 data-i18n="outcome1Title">组织视觉信息</h3><p data-i18n="outcome1Copy">识别内容关系，用层级、分组和顺序降低理解成本。</p></div></article>
+          <article><span>02</span><div><h3 data-i18n="outcome2Title">选择表达形式</h3><p data-i18n="outcome2Copy">根据目的与媒介，判断什么样的视觉结构更合适。</p></div></article>
+          <article><span>03</span><div><h3 data-i18n="outcome3Title">构建交互体验</h3><p data-i18n="outcome3Copy">让可视化在不同屏幕与操作方式下保持清楚、稳定、可用。</p></div></article>
         </div>
       </section>
     </main>
     <footer class="site-footer">
-      <a class="wordmark footer-mark" href="./"><span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="wordmark-copy"><b>可视化导论</b><small>VISUALIZATION INTRODUCTION</small></span></a>
+      <a class="wordmark footer-mark" href="./"><span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="wordmark-copy"><b data-i18n="brand">可视化导论</b><small data-i18n="brandSmall">VISUALIZATION INTRODUCTION</small></span></a>
     </footer>
   </body>
 </html>

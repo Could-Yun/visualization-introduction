@@ -112,6 +112,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   cursor: pointer;
 }
 .icon-button:hover { color: var(--red); border-color: var(--red); }
+.header-actions { display: flex; align-items: center; justify-self: end; gap: 10px; }
+.language-button { min-width: 48px; min-height: 38px; padding: 0 10px; border: 1px solid var(--line); border-radius: 20px; color: var(--ink); background: var(--surface); font-size: 14px; font-weight: 750; cursor: pointer; }
+.language-button:hover { border-color: var(--blue); color: var(--blue); }
+.language-button:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+[lang="en"] .wordmark-copy b { font-size: 13px; letter-spacing: -.02em; }
+@media (max-width: 500px) { .header-actions { gap: 6px; } [lang="en"] .wordmark-copy b { font-size: 11px; } .language-button { min-width: 42px; padding: 0 6px; } }
 
 .home-hero {
   position: relative;

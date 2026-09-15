@@ -74,7 +74,81 @@ export const EXERCISES = [
   }
 ];
 
+export const EXERCISES_EN = [
+  {
+    title: '01 · Order content around the reader’s task', language: 'html',
+    goal: 'Scenario: readers want a quick overview of exhibition scale. Move the facts before the exhibition introduction and change the button to “View collection facts.”',
+    instructions: ['Choose “View collection facts” and “Facts first” above to compare the information order.', 'Move the entire facts section in the HTML below, not just its heading.', 'Change the button text, check the result, then answer the concept question.'],
+    initial: '<main>\n  <section data-block="hero">\n    <h1>Objects Tell Stories</h1>\n    <p>Explore the everyday life and craft of Eastern objects.</p>\n    <button>Explore the exhibition</button>\n  </section>\n  <section data-block="facts">\n    <h2>Collection facts</h2>\n    <p>48 objects · 6 periods</p>\n  </section>\n</main>',
+    solution: '<main>\n  <section data-block="facts">\n    <h2>Collection facts</h2>\n    <p>48 objects · 6 periods</p>\n  </section>\n  <section data-block="hero">\n    <h1>Objects Tell Stories</h1>\n    <p>Explore the everyday life and craft of Eastern objects.</p>\n    <button>View collection facts</button>\n  </section>\n</main>',
+    hint: 'Select the full <section data-block="facts">…</section> and move it before the hero. DOM order is the default reading order.',
+    question: 'Why change content order in HTML rather than only visually moving the facts with CSS?',
+    options: ['HTML sets the default reading order; visual and assistive-technology paths should agree.', 'Earlier elements automatically turn blue.', 'A section cannot be laid out with CSS.'], answer: 0,
+    explanation: 'Position conveys priority; DOM order also affects screen-reader reading paths. Organize information first, then its appearance.',
+    transfer: 'You learned to define the reader’s task before ordering content. This also applies to course, news, and product pages.'
+  },
+  {
+    title: '02 · Replace generic containers with semantic structure', language: 'html',
+    goal: 'Keep the text unchanged. Turn the navigation container into nav, the primary content into main, and the headed content group into section.',
+    instructions: ['Compare “Only div elements” and “Semantic elements” above; the appearance may not change.', 'Change the opening and closing tags of three containers and add aria-label="Exhibition navigation" to nav.', 'Keep h1 and h2 so the section has a heading.'],
+    initial: '<div class="navigation">Xingcang · Exhibition · Collection</div>\n<div class="page">\n  <h1>Objects Tell Stories</h1>\n  <div class="content">\n    <h2>Curator’s introduction</h2>\n    <p>An object holds the warmth of everyday life.</p>\n  </div>\n</div>',
+    solution: '<nav aria-label="Exhibition navigation">Xingcang · Exhibition · Collection</nav>\n<main class="page">\n  <h1>Objects Tell Stories</h1>\n  <section class="content">\n    <h2>Curator’s introduction</h2>\n    <p>An object holds the warmth of everyday life.</p>\n  </section>\n</main>',
+    hint: '<nav> describes navigation; <main> describes primary content. A section is a headed group, not merely a styling box.',
+    question: 'Why might changing div to main leave the page looking the same?',
+    options: ['main requires JavaScript to appear.', 'Semantics describe the content’s role; CSS usually controls appearance.', 'Browsers do not understand main.'], answer: 1,
+    explanation: 'Semantic structure and visual styling are separate layers. Semantic elements help assistive technology identify regions without designing the layout automatically.',
+    transfer: 'You learned that HTML describes meaning and CSS presentation. Similar appearance does not prove good structure.'
+  },
+  {
+    title: '03 · Build a centered container and three-column cards', language: 'css',
+    goal: 'On a 720px exercise canvas, make a centered container with a 560px maximum width and 24px padding; arrange cards in three columns with a 16px gap.',
+    instructions: ['Change spacing above to see when cards feel crowded; this exercise uses a smaller container.', 'Set max-width, margin-inline, and padding on .page.', 'Set display: grid, three columns, and gap: 16px on .cards.'],
+    initial: EXERCISES[2].initial, solution: EXERCISES[2].solution,
+    hint: 'max-width caps the width; margin-inline: auto shares unused space; repeat(3, minmax(0, 1fr)) makes three equal, shrinkable columns.',
+    question: 'Why use Grid instead of a fixed pixel width for each card?',
+    options: ['Grid generates card content automatically.', 'Fixed widths can never be used.', 'Grid manages columns and spacing consistently as the container changes.'], answer: 2,
+    explanation: 'Grid gives repeated items shared sizing relationships. Fixed widths can leave gaps or overflow after the container changes.',
+    transfer: 'You learned that the container sets outer boundaries, Grid manages inner relationships, and gap sets spacing between items.'
+  },
+  {
+    title: '04 · Give the hero a clear text–image hierarchy', language: 'css',
+    goal: 'Turn the hero into two columns with a 24px text–image gap. Set the heading between 32–48px so the summary and button still have room.',
+    instructions: ['Compare 5:7 and 7:5 above: which better supports the heading and main image?', 'Enable Grid on .hero, define two columns, and set a 24px gap.', 'Adjust .hero h1 without enlarging all text.'],
+    initial: EXERCISES[3].initial, solution: EXERCISES[3].solution,
+    hint: 'Use 5fr 7fr or 1fr 1fr for two columns. gap sets the distance. Emphasize the heading without crowding the summary and action.',
+    question: 'Why not enlarge the heading, summary, and button all at once?',
+    options: ['Without size differences, hierarchy is unclear and the hero gets crowded.', 'CSS forbids multiple large font sizes.', 'Headings should always be small.'], answer: 0,
+    explanation: 'Hierarchy comes from relative differences, not every element competing for attention. Keep the heading prominent while preserving the other content.',
+    transfer: 'You learned to use Grid for composition and judge hierarchy through proportion, space, and content completeness.'
+  },
+  {
+    title: '05 · Fix a crowded two-column layout on mobile', language: 'css',
+    goal: 'Keep two columns at 720px. At 600px and below, switch to one column so the 390px canvas does not overflow horizontally.',
+    instructions: ['First inspect the 390px preview below and see the crowding without a breakpoint.', 'Add @media (max-width: 600px) and override .hero to one column only on narrow screens.', 'The checker measures both 720px and 390px, rather than merely searching for keywords.'],
+    initial: '.hero {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 24px;\n}\n/* Add a narrow-screen rule here */',
+    solution: EXERCISES[4].solution,
+    hint: 'Keep the base two-column rule. Override grid-template-columns inside the media query; otherwise desktop becomes one column too.',
+    question: 'Why is shrinking the entire desktop page not enough for responsive design?',
+    options: ['Phones cannot load CSS.', 'Shrinking hurts text and tap targets; rearrange content around available space.', 'Each device requires a separate HTML file.'], answer: 1,
+    explanation: 'Responsive design protects readability and the primary task through reflow, without maintaining separate content for every device.',
+    transfer: 'You learned base rules plus conditional overrides. A breakpoint should solve observed crowding, not match a device brand blindly.'
+  },
+  {
+    title: '06 · Finish keyboard and reading details', language: 'css',
+    goal: 'Set body text to at least 16px, button height to at least 44px, and a clear outline on :focus-visible.',
+    instructions: ['Turn off “Show keyboard focus” above and see why your position becomes hard to identify.', 'Fix body and button sizes below, then add .action:focus-visible.', 'Press Tab in the exercise preview to test focus; check your work and answer the concept question.'],
+    initial: 'body { font-size: 12px; }\n.action {\n  min-height: 24px;\n  outline: none;\n}\n/* Add keyboard focus styles */',
+    solution: EXERCISES[5].solution,
+    hint: 'Use .action:focus-visible and do not remove outlines in every state. Size checks are exercise constraints, not a complete accessibility audit.',
+    question: 'What is the most important job of a button’s focus outline?',
+    options: ['Simply make the button more colorful.', 'Prevent users from clicking.', 'Show keyboard users where their current action is.'], answer: 2,
+    explanation: 'Keyboard users need visible location feedback. Keep checking contrast, order, zoom, and screen readers in a real project.',
+    transfer: 'You learned that usability is part of design. Final project: transfer all six steps to your own course page and submit HTML, CSS, and a short layout rationale.'
+  }
+];
+
 const baseHtml = '<main class="page"><div class="hero"><div><h1>器物有声</h1><p>探索器物的工艺与日常，读懂展览主题。</p><button class="action">开始观展</button></div><div class="visual" role="img" aria-label="展品图片占位">展品主图</div></div><h2>馆藏主题</h2><div class="cards"><article>青瓷</article><article>陶器</article><article>金工</article></div></main>';
+const baseHtmlEn = '<main class="page"><div class="hero"><div><h1>Objects Tell Stories</h1><p>Explore the craft and everyday life behind the exhibition.</p><button class="action">Explore the exhibition</button></div><div class="visual" role="img" aria-label="Featured object placeholder">Featured object</div></div><h2>Collection themes</h2><div class="cards"><article>Celadon</article><article>Pottery</article><article>Metalwork</article></div></main>';
 const concepts = [
   '关键概念：浏览器默认按 HTML 中的先后顺序阅读区块。移动完整元素会改变顺序；只改文字不会改变结构。',
   '关键概念：标签名称表达职责，class 表达样式分组。nav、main、section 不能互相替代；开始和结束标签必须配对。',
@@ -83,6 +157,30 @@ const concepts = [
   '关键概念：媒体查询是条件规则。当视口符合 max-width 时，它覆盖基础样式；宽屏仍使用查询之外的基础规则。',
   '关键概念：min-height 约束操作区域；:focus-visible 表示浏览器认为需要显示焦点的状态，通常包含键盘导航。'
 ];
+const conceptsEn = [
+  'Key idea: browsers read blocks in HTML order by default. Moving an entire element changes that order; editing text alone does not.',
+  'Key idea: elements describe roles, while classes group styles. nav, main, and section have different jobs; opening and closing tags must match.',
+  'Key idea: max-width caps width; auto margins distribute outer space; padding creates inner space; 1fr shares remaining column width.',
+  'Key idea: grid-template-columns defines relative column sizes; gap defines space between them; font-size changes text scale, not layout.',
+  'Key idea: a media query is a conditional rule. When the viewport matches max-width, it overrides base styles; wider screens retain base rules.',
+  'Key idea: min-height constrains the target area; :focus-visible marks states where the browser judges a visible focus indicator useful, often keyboard navigation.'
+];
+const checksEn = [
+  ['The entire facts section precedes the exhibition introduction', 'Button text matches the reader’s task', 'The exhibition heading and facts remain present'],
+  ['One unique main element contains primary content', 'nav has a readable accessible name', 'The section in main has a heading and h1 remains'],
+  ['The 560px maximum-width container is centered at 720px', 'Left and right padding are 24px', 'Cards use three Grid columns with a 16px gap'],
+  ['The hero uses two Grid columns', 'The text–image gap is 24px', 'The heading stays between 32–48px'],
+  ['Two columns remain at 720px', 'The hero becomes one column at 390px', 'No horizontal content overflow at 390px'],
+  ['Body text is at least 16px', 'The button’s actual height is at least 44px', 'focus-visible declares a visible outline of at least 2px']
+];
+const practiceUi = {
+  zh: { edit: '编辑 ', question: '理解检查：', correct: '回答正确。', retry: '再想一想。', pass: '通过 · ', fix: '待修正 · ', quizPass: '通过 · 理解题回答正确', quizPending: '待完成 · 请回答下方理解题', solution: '参考解法（先尝试，再对照解释）：\n' },
+  en: { edit: 'Edit ', question: 'Concept check: ', correct: 'Correct. ', retry: 'Think again. ', pass: 'Passed · ', fix: 'Needs work · ', quizPass: 'Passed · Concept question answered correctly', quizPending: 'Incomplete · Answer the concept question below', solution: 'Reference solution (try first, then compare):\n' }
+};
+let practiceLanguage = 'zh';
+export const exerciseFor = (index, language = practiceLanguage) => (language === 'en' ? EXERCISES_EN : EXERCISES)[index];
+export function setPracticeLanguage(language) { practiceLanguage = language === 'en' ? 'en' : 'zh'; }
+const draftKey = (index) => practiceLanguage + ':' + index;
 const baseCss = '*{box-sizing:border-box}body{margin:0;color:#102438;background:#f3f7fb;font:16px/1.6 system-ui,sans-serif}main{padding:24px}section,nav{padding:20px;margin:12px;border:1px solid #bccddd;border-radius:8px;background:white}h1{font-size:36px;margin:0 0 12px}h2{font-size:20px}p{margin:0 0 18px}.hero>*{min-width:0}.visual{display:grid;place-items:center;min-height:160px;background:#cde4f2;color:#29536d;border-radius:8px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}article{padding:24px 12px;background:white;border:1px solid #cbd8e4;border-radius:6px}button{font:inherit;background:#123e61;color:white;border:0;border-radius:5px;padding:8px 16px;cursor:pointer}';
 let stepIndex = 0;
 let selectedWidth = 720;
@@ -94,16 +192,16 @@ const $ = (name) => document.querySelector('[data-practice-' + name + ']');
 
 function updateFrame() {
   revision += 1;
-  const ex = EXERCISES[stepIndex];
+  const ex = exerciseFor(stepIndex);
   const code = $('editor').value;
-  drafts.set(stepIndex, code);
+  drafts.set(draftKey(stepIndex), code);
   $('results').replaceChildren();
   const frame = $('frame');
   ready = new Promise((resolve) => { frame.onload = resolve; });
   // The sandbox intentionally disables scripts, forms, popups and top navigation.
   const css = ex.language === 'css' ? code.replace(/<\/style/gi, '<\\/style') : '';
-  const html = ex.language === 'html' ? code : baseHtml;
-  frame.srcdoc = '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;unsafe-inline&#39;"><style>' + baseCss + '\n' + css + '</style></head><body>' + html + '</body></html>';
+  const html = ex.language === 'html' ? code : (practiceLanguage === 'en' ? baseHtmlEn : baseHtml);
+  frame.srcdoc = '<!doctype html><html lang="' + (practiceLanguage === 'en' ? 'en' : 'zh-CN') + '"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src &#39;none&#39;; style-src &#39;unsafe-inline&#39;"><style>' + baseCss + '\n' + css + '</style></head><body>' + html + '</body></html>';
 }
 
 function chooseWidth(width) {
@@ -114,13 +212,13 @@ function chooseWidth(width) {
 
 export function renderPractice(index) {
   stepIndex = index;
-  const ex = EXERCISES[index];
+  const ex = exerciseFor(index);
   $('title').textContent = ex.title;
-  $('language').textContent = '编辑 ' + ex.language.toUpperCase();
-  $('goal').textContent = ex.goal + ' ' + concepts[index];
+  $('language').textContent = practiceUi[practiceLanguage].edit + ex.language.toUpperCase();
+  $('goal').textContent = ex.goal + ' ' + (practiceLanguage === 'en' ? conceptsEn : concepts)[index];
   $('instructions').innerHTML = ex.instructions.map((text) => '<li>' + text + '</li>').join('');
-  $('editor').value = drafts.get(index) ?? ex.initial;
-  $('question').textContent = '理解检查：' + ex.question;
+  $('editor').value = drafts.get(draftKey(index)) ?? ex.initial;
+  $('question').textContent = practiceUi[practiceLanguage].question + ex.question;
   $('options').replaceChildren();
   ex.options.forEach((text, optionIndex) => {
     const label = document.createElement('label');
@@ -129,7 +227,7 @@ export function renderPractice(index) {
     input.checked = quizAnswers.get(index) === optionIndex;
     input.addEventListener('change', () => {
       quizAnswers.set(index, optionIndex);
-      $('quiz-feedback').textContent = (optionIndex === ex.answer ? '回答正确。' : '再想一想。') + ex.explanation;
+      $('quiz-feedback').textContent = (optionIndex === ex.answer ? practiceUi[practiceLanguage].correct : practiceUi[practiceLanguage].retry) + ex.explanation;
       $('quiz-feedback').className = optionIndex === ex.answer ? 'feedback-pass' : 'feedback-fail';
     });
     label.append(input, document.createTextNode(text)); $('options').append(label);
@@ -155,12 +253,12 @@ export async function checkPractice() {
   };
   const columns = (selector) => (computed(selector)?.gridTemplateColumns || '').split(/\s+/).filter(Boolean).length;
   const checks = [];
-  const add = (ok, text) => checks.push({ ok: Boolean(ok), text });
+  const add = (ok, text) => checks.push({ ok: Boolean(ok), text: practiceLanguage === 'en' ? checksEn[index][checks.length] : text });
   if (index === 0) {
     const facts = doc.querySelector('[data-block="facts"]');
     const hero = doc.querySelector('[data-block="hero"]');
     add(facts && hero && (facts.compareDocumentPosition(hero) & 4), '概况区整体位于展览介绍之前');
-    add(doc.querySelector('button')?.textContent.trim() === '查看馆藏概况', '按钮文字与读者任务一致');
+    add(doc.querySelector('button')?.textContent.trim() === (practiceLanguage === 'en' ? 'View collection facts' : '查看馆藏概况'), '按钮文字与读者任务一致');
     add(doc.querySelector('h1') && facts?.querySelector('h2'), '展览标题与概况内容没有丢失');
   } else if (index === 1) {
     add(doc.querySelectorAll('main').length === 1, '主体使用唯一的 main');
@@ -195,9 +293,9 @@ export async function checkPractice() {
   chooseWidth(selectedWidth);
   if (index !== stepIndex || capturedRevision !== revision) return false;
   const list = $('results'); list.replaceChildren();
-  checks.forEach(({ ok, text }) => { const li = document.createElement('li'); li.textContent = (ok ? '通过 · ' : '待修正 · ') + text; li.className = ok ? 'feedback-pass' : 'feedback-fail'; list.append(li); });
-  const quizCorrect = quizAnswers.get(index) === EXERCISES[index].answer;
-  const li = document.createElement('li'); li.textContent = quizCorrect ? '通过 · 理解题回答正确' : '待完成 · 请回答下方理解题'; li.className = quizCorrect ? 'feedback-pass' : 'feedback-fail'; list.append(li);
+  checks.forEach(({ ok, text }) => { const li = document.createElement('li'); li.textContent = (ok ? practiceUi[practiceLanguage].pass : practiceUi[practiceLanguage].fix) + text; li.className = ok ? 'feedback-pass' : 'feedback-fail'; list.append(li); });
+  const quizCorrect = quizAnswers.get(index) === exerciseFor(index).answer;
+  const li = document.createElement('li'); li.textContent = quizCorrect ? practiceUi[practiceLanguage].quizPass : practiceUi[practiceLanguage].quizPending; li.className = quizCorrect ? 'feedback-pass' : 'feedback-fail'; list.append(li);
   return checks.every((item) => item.ok) && quizCorrect;
 }
 
@@ -209,8 +307,8 @@ export function bindPractice() {
     const link = document.createElement('a'); link.href = url; link.download = 'layout-exercise-' + (stepIndex + 1) + '.html'; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
-  $('reset').addEventListener('click', () => { $('editor').value = EXERCISES[stepIndex].initial; updateFrame(); });
-  $('hint').addEventListener('click', () => { $('hint-text').hidden = false; $('hint-text').textContent = EXERCISES[stepIndex].hint; });
-  $('answer').addEventListener('click', () => { $('hint-text').hidden = false; $('hint-text').textContent = '参考解法（先尝试，再对照解释）：\n' + EXERCISES[stepIndex].solution; });
+  $('reset').addEventListener('click', () => { $('editor').value = exerciseFor(stepIndex).initial; updateFrame(); });
+  $('hint').addEventListener('click', () => { $('hint-text').hidden = false; $('hint-text').textContent = exerciseFor(stepIndex).hint; });
+  $('answer').addEventListener('click', () => { $('hint-text').hidden = false; $('hint-text').textContent = practiceUi[practiceLanguage].solution + exerciseFor(stepIndex).solution; });
   document.querySelectorAll('[data-practice-width]').forEach((button) => button.addEventListener('click', () => chooseWidth(Number(button.dataset.practiceWidth))));
 }
